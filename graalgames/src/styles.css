@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+
+
+html {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+  
+body {
+    height: 50vh;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(70deg, rgb(124, 20, 165), rgb(202, 130, 224));
+}

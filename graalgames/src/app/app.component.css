@@ -1,0 +1,341 @@
+h2{
+    font-family: "BPreplay Bold", serif;
+    color: rgb(255, 255, 255);
+}
+
+h3{
+    font-family: "BPreplay", serif;
+    color: rgb(255, 255, 255);
+}
+
+.content{
+    width:100%;
+}
+
+.center{
+    margin: auto;
+    margin-top: 50vh; /* poussé de la moitié de hauteur de viewport */
+    transform: translateY(-50%); /* tiré de la moitié de sa propre hauteur */
+    width: 50%;
+}
+
+.home{
+    border: 4px solid rgb(113, 49, 138);
+    box-shadow: 0px -1px 20px 0px rgba(65, 65, 65, 0.75) inset;
+    border-radius: 20px;
+    padding: 10px;
+    text-align: center;
+    min-width: 533px;
+}
+
+.in-game{
+    text-align: center;
+}
+
+.input1{
+    border: 4px solid rgb(113, 49, 138);
+    border-radius: 10px;
+    background-color: rgba(230, 179, 230, 0.37);
+    font-family: "BPreplay Bold", serif;
+    font-size: 20px;
+    text-align: center;
+    color:rgb(255, 255, 255);
+}
+
+.input1:focus{
+    background-color: rgba(230, 179, 230, 0.13);
+}
+
+.input1-number{
+    border: 4px solid rgb(113, 49, 138);
+    border-radius: 10px;
+    background-color: rgba(230, 179, 230, 0.37);
+    font-family: "BPreplay Bold", serif;
+    font-size: 20px;
+    text-align: center;
+    color:rgb(255, 255, 255);
+    width: 60px;
+}
+
+.btn1{
+    border: 4px solid rgb(113, 49, 138);
+    border-radius: 10px;
+    background-color: rgba(145, 56, 145, 0.568);
+    font-family: "BPreplay Bold", serif;
+    font-size: 20px;
+    color:rgb(255, 255, 255);
+    margin : 5px 10px;
+}
+
+.btnWhistle{
+    border: 4px solid rgb(113, 49, 138);
+    border-radius: 10px;
+    background-color: rgba(145, 56, 145, 0.568);
+    font-family: "BPreplay Bold", serif;
+    font-size: 20px;
+    color:rgb(255, 255, 255);
+    margin : 5px 10px;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 6px;
+}
+
+.purpose .btnBbl{
+    background-color: rgb(113, 49, 138);
+    border-radius: 4px;
+    z-index: 2;
+    font-family: "BPreplay", serif;
+    font-size: 16px;
+    padding: 7px;
+    color: rgb(255, 255, 255);
+    top: 0px;
+    position: absolute;
+    left: -40px;
+    width: 165px;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 6px 6px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.68,-0.55,0.265,1.55);
+}
+
+.purpose:hover .btnBbl{
+    opacity: 1;
+    top: -36px;
+}
+
+.purpose .btnBbl:before{
+    position: absolute;
+    content: "";
+    height: 15px;
+    width: 15px;
+    background: rgb(113, 49, 138);
+    top: 30px;
+    left: 73px;
+    transform: rotate(45deg);
+}
+
+.player-name{
+    font-family: "BPreplay Bold", serif;
+    font-size: 25px;
+    color:rgb(255, 255, 255);
+}
+
+.player-purpose{
+    font-family: "BPreplay", serif;
+    font-size: 25px;
+    color:rgb(255, 255, 255);
+}
+
+.lobby-content{
+    text-align: center;
+}
+
+.games-row{
+    display:flex;
+    font-family: "BPreplay Bold", serif;
+    text-align: center;
+    justify-content: center;
+    border: 4px solid rgb(113, 49, 138);
+    border-radius: 10px;
+    background-color:rgba(184, 88, 184, 0.568);
+    width: 500px;
+    margin:0 auto;
+}
+
+.games-row-element{
+    margin: 0 20px;
+    font-size: 18px;
+    position: relative;
+    top:10px;
+    color:rgb(255, 255, 255);
+}
+
+.input-caret-left{
+    display: inline-block;
+    width:36px;
+    height:36px;
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(113, 49, 138)' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' d='M10 12.796V3.204L4.519 8 10 12.796zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753z' clip-rule='evenodd'/></svg>");
+}
+
+
+.input-caret-left:active{
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(113, 49, 138)' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' d='m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z' clip-rule='evenodd'/></svg>");
+}
+
+.input-caret-right{
+    display: inline-block;
+    width:36px;
+    height:36px;
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(113, 49, 138)' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' d='M6 12.796V3.204L11.481 8 6 12.796zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753z' clip-rule='evenodd'/></svg>");
+}
+
+
+.input-caret-right:active{
+    background-image: url("data:image/svg+xml,<svg viewBox='0 0 16 16' fill='rgb(113, 49, 138)' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' d='m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z' clip-rule='evenodd'/></svg>");
+}
+
+.dice{
+    width: 36px;
+    height: 36px;
+}
+
+.goodDice{
+    width: 36px;
+    height: 36px;
+    border: 3px solid rgb(9, 168, 35);
+    border-radius: 5px;
+}
+
+.dice-row{
+    display: flex;
+    justify-content: center;
+    width: 350px;
+    height: 50px;
+    border-radius: 10px;
+    background-color: rgba(230, 179, 230, 0.37);
+    margin: 0 auto;
+}
+
+.dice-row-element{
+    position: relative;
+    top: 7px;
+    margin: 0 10px;
+}
+
+.game-player-row{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: rgba(230, 179, 230, 0.37);
+    width: 450px;
+    margin: 10px auto;
+    min-height: 74px;
+    border: 4px solid rgb(113, 49, 138);
+}
+
+.game-player-row-element{
+    margin: 0 10px;
+    display: inline-block;
+    position: relative;
+}
+
+.game-player-active{
+    border: 4px solid rgb( 134, 210, 88 );
+}
+
+.purpose-input{
+    border: 4px solid rgb( 134, 210, 88 );
+    border-radius: 10px;
+    background-color: rgba(230, 179, 230, 0.37);
+    width: 290px;
+    margin: 0 auto;
+}
+
+.bet-form{
+    display: flex;
+    justify-content: center;
+}
+
+.selfBbl{
+    width: 100px;
+    height: 55px;
+    background-color: rgba(230, 179, 230, 0.37);
+    position: relative;
+    border-radius: 10px;
+    border: 4px solid rgb(113, 49, 138);
+    font-family: "BPreplay Bold", serif;
+    font-size: 25px;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    padding-top: 3px;
+    margin: 15px 0;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 6px;
+}
+
+.selfBbl:before{
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: 35px;
+    top: -20px;
+    border-bottom: 20px solid rgb(113, 49, 138);
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+}
+
+.otherBbl{
+    width: 100px;
+    height: 55px;
+    background-color: rgba(230, 179, 230, 0.37);
+    position: relative;
+    border-radius: 10px;
+    border: 4px solid rgb(113, 49, 138);
+    font-family: "BPreplay Bold", serif;
+    font-size: 25px;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    padding-top: 3px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 6px;
+}
+
+.otherBbl:before{
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-right: 20px solid rgb(113, 49, 138);
+    border-bottom: 10px solid transparent;
+    left: -20px;
+    bottom: 14px;
+}
+
+.redCross{
+    font-family: "BPreplay Bold", serif;
+    font-size: 36px;
+    color: red;
+}
+
+.version{
+    position: fixed;
+    bottom:10px;
+    right:10px;
+    font-family: "BPreplay", serif;
+    font-size: 22px;
+    color:rgba(255, 255, 255, 0.8);
+}
+
+.path--background {
+    fill: rgb(34, 213, 201);
+    stroke: #fff;
+    stroke-width: 0px;
+}
+
+.pulse {
+    fill: rgb(255, 74, 74);
+}
+
+.path--foreground {
+    fill: #eee;
+    stroke: #eee;
+    stroke-width: 2px;
+}
+
+.label-timer{
+    font: 90px "Open Sans";
+    font-weight: 900;
+    text-anchor: middle;
+    fill: rgb(34, 213, 201);
+}
+
+@font-face {
+    font-family: "BPreplay";
+    src: url("../assets/fonts/BPreplay.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "BPreplay Bold";
+    src: url("../assets/fonts/BPreplayBold.otf") format("opentype");
+}
