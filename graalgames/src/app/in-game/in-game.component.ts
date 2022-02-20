@@ -171,7 +171,7 @@ export class InGameComponent implements OnInit {
     console.log("gameDices : " + (this.game.currentBet[0] != 0 && this.game.currentBet[1] != 0) && ( this.isDiceDisable == false && this.isValDisable == false));
   }
 
-  public diceUp(betDice){
+  public diceUp(betDice){ //Augmentation Nb. de dé
     console.log("DiceUp received - betDice : "+betDice);
     let val = 1;
     if (Number(betDice) >= this.minDices){
@@ -191,7 +191,7 @@ export class InGameComponent implements OnInit {
     
   }
 
-  public diceDown(betDice){
+  public diceDown(betDice){ //Diminution Nb. de dé
     let val = 1;
     if (Number(betDice) >= this.minDices){
       val = Number(betDice) - 1;
@@ -208,7 +208,7 @@ export class InGameComponent implements OnInit {
     }
   }
 
-  public valUp(betVal){
+  public valUp(betVal){ //Augmentation valeur du dé
     let val = 1;
     if (Number(betVal) >= this.minVal){
       val = Number(betVal) + 1;
@@ -225,7 +225,7 @@ export class InGameComponent implements OnInit {
     }
   }
 
-  public valDown(betVal){
+  public valDown(betVal){ //Diminution valeur du dé
     let val = 1;
     if (Number(betVal) > this.minVal){
       val = Number(betVal) - 1;
@@ -242,13 +242,13 @@ export class InGameComponent implements OnInit {
     }
   }
 
-  public askForBet(bet){
+  public askForBet(bet){  //Prposer un pari
     this.askBet.emit(bet);
     this.isDiceDisable = false;
     this.isValDisable = false;
   }
 
-  public askForLiar(){
+  public askForLiar(){  //Accuser de menteur
     this.askLiar.emit();
     this.isDiceDisable = false;
     this.isValDisable = false;

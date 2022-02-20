@@ -33,18 +33,18 @@ export class NewGameComponent implements OnInit {
     this.game.name = this.name;
   }
 
-  askACreateRoom(){
+  askACreateRoom(){ //Demande création de la partie
     this.askCreateRoom.emit(this.game);
   }
 
-  playerUp(){
+  playerUp(){ //Ajout d'un joueur
     this.game.nbPlayers++;
     if(this.game.nbPlayers > 6){
       this.game.nbPlayers = 6;
     }
   }
 
-  playerDown(){
+  playerDown(){ //Suppression d'un joueur
     this.game.nbPlayers--;
     if(this.game.nbPlayers < 2){
       this.game.nbPlayers = 2;

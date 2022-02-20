@@ -62,22 +62,27 @@ export class AppComponent {
   
 
   public ngOnInit() {
+    //Initialisation du socket
     this.socket = io("localhost:3000", {     /* https://calm-wildwood-32710.herokuapp.com/  */
       withCredentials: false,
       extraHeaders: {
         "my-custom-header": "abcd"
       }
     });
-
+    
+    //Evènements socket :
+    //Erreur de connection
     this.socket.on("connect_error", (err) => {
       this.showServerErr();
     });
 
+    //Erreur connection perdue
     this.socket.on("errNotLogged", ()=>{
       alert("Error : Connection Lost");
       this.showLogin();
     });
 
+    //Joueur login
     this.socket.on('logged', (data)=>{
       this.user = data.user;
       this.players = data.dataPlayers;
@@ -85,15 +90,17 @@ export class AppComponent {
       this.showLobby();
     });
 
+    //Nouveau joueur se connecte
     this.socket.on("new_user", (user)=>{
       this.players.push(user);
     });
 
+    //Rejoindre salon automatiquement après sa création
     this.socket.on("autoJoinRoom", (gameId)=>{
-      
       this.tryJoinRoom(gameId);
     });
 
+    //Rejoindre un salon (depuis la liste des salons)
     this.socket.on("joinRoom", (game)=>{
       this.user.actualGame = game.id;
       this.currentGame = game;
@@ -109,18 +116,22 @@ export class AppComponent {
       this.showGameLobby();
     });
 
+    //Rafraichissement des données de la partie
     this.socket.on("dataGamesRefresh", (games) =>{
       this.games = games;
     })
 
+    //Refraichissement de la liste des salons
     this.socket.on("refreshRoom", (game)=>{
       this.currentGame = game;
     });
 
+    //Réception des dés
     this.socket.on("gameDicesReceive", (dices)=>{
       this.myDices = dices;
     });
 
+    //Rejoindre une partie (démarrer partie)
     this.socket.on("joinGame", (game)=>{
       this.currentGame = game;
       this.refreshOpponents();
@@ -128,12 +139,14 @@ export class AppComponent {
       this.showInGame();
     });
 
+    //Changement de tour
     this.socket.on("turnChange", (game)=>{
       this.currentGame = game;
       this.getMinDices();
       this.getMinVal();
     });
 
+    //Début d'un nouveau round
     this.socket.on("newRound", (game)=>{
       this.currentGame = game;
       this.resLiar = [];
@@ -146,6 +159,7 @@ export class AppComponent {
       this.refreshOpponents();
     });
 
+    //Réception résultat d'accusation de menteur
     this.socket.on("resultLiar", (data)=>{
       this.currentGame = data[0];
       this.resLiar = data[1];
@@ -153,6 +167,7 @@ export class AppComponent {
       this.isEndRound = true;
     });
 
+    //Fin d'une partie
     this.socket.on("endGame", (data)=>{
       this.currentGame = data[0];
       this.winnerI = data[1];
@@ -162,19 +177,23 @@ export class AppComponent {
 
     });
 
+    //Deconnexion
     this.socket.on("disconnect", function(){
       console.log("Server down : Show page");
     })
   }
 
+  //Demande de login
   public login(uname:string){
     this.socket.emit("login", uname);
   }
 
+  //Demande rejoindre un salon
   public tryJoinRoom(gameId){
     this.socket.emit("tryJoinRoom", gameId);
   }
 
+  //Affichage des différentes fenêtres
   public showLogin(){
     this.isLogin=true;
     this.isLobby=false;
@@ -230,31 +249,38 @@ export class AppComponent {
     this.isServerErr = true;
   }
 
+  //Demande création de salon
   public createRoom(game){
     this.socket.emit("createRoom", game);
   }
 
+  //Demande rafraichissement des salons
   public refreshGames(){
     this.socket.emit("refreshGames", "");
   }
 
+  //Demande quitter un salon
   public leaveRoom(){
     this.socket.emit("leaveRoom", "");
     this.showLobby();
   }
 
+  //Demande débuter partie
   public tryStartGame(gameId){
     this.socket.emit("tryStartGame", gameId);
   }
 
+  //Envoyer un pari
   public sendBet(bet){
     this.socket.emit("playerBet", [this.user.uid, this.currentGame.id, bet]);
   }
 
+  //Envoyer accusation de menteur
   public sendLiar(){
     this.socket.emit("playerLiar", this.currentGame.id);
   }
 
+  //Obtenir le nombre de dé minimum en fonction du dernier pari
   public getMinDices(){
     if (this.currentGame.currentBet[0] == 0 && this.currentGame.currentBet[1] == 0){
       this.minDices = 1;
@@ -262,6 +288,7 @@ export class AppComponent {
     this.betDiceValue = this.minDices;
   }
 
+  //Obtenir la valeur de dé minimum en fonction du dernier pari
   public getMinVal(){
     if (this.currentGame.currentBet[0] == 0 && this.currentGame.currentBet[1] == 0){
       this.minVal = 1;
@@ -269,12 +296,14 @@ export class AppComponent {
     this.betValValue = this.minVal;
   }
 
+  //Demande quitter une partie
   public leaveGame(){
     this.socket.emit("leaveGame", "");
     this.resetDefaultGameValue();
     this.showLobby();
   }
 
+  //Rafraichissement des adversaires de la partie (après qu'un joueur ai quitté)
   public refreshOpponents(){
     this.opponents = this.currentGame.players;
     let userIndex;
@@ -286,6 +315,7 @@ export class AppComponent {
     this.opponents.splice(userIndex, 1);
   }
 
+  //Reset une partie à zéro
   public resetDefaultGameValue(){
     this.currentGame = undefined;
     this.myDices = [];
