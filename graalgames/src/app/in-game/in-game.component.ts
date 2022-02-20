@@ -114,7 +114,7 @@ import { IGame, IPlayer } from '../interfaces';
           </div>
           <input class="btn1" type="button" value="Proposer" (click)="this.askForBet([betDiceValue, betValValue])" [disabled]="(this.game.currentBet[0] != 0 && this.game.currentBet[1] != 0) && ( this.isDiceDisable == false && this.isValDisable == false)">
         
-          <div class="timer"><countdown [config]="{leftTime: 20, format: 's'}"></countdown></div>
+          <!-- <div class="timer"><countdown [config]="{leftTime: 20, format: 's'}"></countdown></div> --->
         </div>
         
     </div>

@@ -37,6 +37,8 @@ var timers = {};
 // établissement de la connexion
 io.on('connection', (socket) =>{
 
+    //Evenements Socket
+    //Login d'un nouvel utilisateur
     socket.on('login', function(userData){
         user = {};
         user.uname = userData;
@@ -51,6 +53,7 @@ io.on('connection', (socket) =>{
         socket.broadcast.emit("new_user", user);
     });
 
+    //Création d'un salon de jeu
     socket.on("createRoom", params => {
         if (checkLogged(socket)){
             let game = {};
@@ -66,6 +69,7 @@ io.on('connection', (socket) =>{
         }
     });
 
+    //Tentattive rejoindre un salon
     socket.on("tryJoinRoom", (gameId) => {
         if (checkLogged(socket)){
             let game = getGameById(gameId);
@@ -83,12 +87,14 @@ io.on('connection', (socket) =>{
         }
     });
 
+    //Rafraichir liste des salons
     socket.on("refreshGames", function(){
         if (checkLogged(socket)){
             socket.emit("dataGamesRefresh", dataGames);
         }
     });
 
+    //Quitter un salon
     socket.on("leaveRoom", function(){
         if (checkLogged(socket)){
             user = players[socket.id];
@@ -106,11 +112,12 @@ io.on('connection', (socket) =>{
         }  
     });
 
+    //Tentative démarrer une partie
     socket.on("tryStartGame", (gameId)=>{
         if (checkLogged(socket)){
             game = getGameById(gameId);
             if(game.nbPlayers >= 2){
-                //                                 Creating Game         
+                //Créatiion de la partie        
                 game.status="started";
                 
                 game.indexPlaying = getRandomInt(game.nbPlayers);
@@ -123,7 +130,7 @@ io.on('connection', (socket) =>{
                 }
                 socket.to(gameId).emit("joinGame", game);
                 socket.emit("joinGame", game);
-                //                                 Generating Dices
+                //Génération des dés
                 diceSet = {};
                 diceSet.dices = [];
                 diceSet.diceNb = [];
@@ -139,13 +146,14 @@ io.on('connection', (socket) =>{
                     sockets[aPlayer.uid].emit("gameDicesReceive", gamesDices[game.id].dices[game.players.indexOf(aPlayer)]);
                 }
 
-                timers[game.id] = setTimeout(()=>{ 
+                /*timers[game.id] = setTimeout(()=>{ 
                                     turnTimeout(game.id);
-                                }, 20000 );
+                                }, 20000 );*/
             }
         }
     });
 
+    //Pari d'un joueur
     socket.on("playerBet", (data)=>{
         if (checkLogged(socket)){
             let aGame = getGameById(data[1]);
@@ -153,13 +161,13 @@ io.on('connection', (socket) =>{
             let betDice = data[2][0];
             let betVal = data[2][1];
             
-            //Check bet
+            //Vérification de la forme du pari (soit le Nb. de dé à été augmenté, soit la valeur du dé à été augmenté)
             let diceForm = (betDice>0 && betDice<=30);
             let valForm = (betVal>0 && betVal<=6);
-            let isFirstBet = (aGame.currentBet[0] == 0 && aGame.currentBet[1] == 0);
-            let diceUp = (Number(betDice) > Number(aGame.currentBet[0]) && Number(betVal) == Number(aGame.currentBet[1]));      
-            let valUp = (Number(betDice) == Number(aGame.currentBet[0]) && Number(betVal) > Number(aGame.currentBet[1]));
-            if (pIndex == aGame.indexPlaying){
+            let isFirstBet = (aGame.currentBet[0] == 0 && aGame.currentBet[1] == 0); //Est-ce le premier pari ?
+            let diceUp = (Number(betDice) > Number(aGame.currentBet[0]) && Number(betVal) == Number(aGame.currentBet[1]));  //Est-ce le Nb. de dé qui est augmentée ?    
+            let valUp = (Number(betDice) == Number(aGame.currentBet[0]) && Number(betVal) > Number(aGame.currentBet[1]));   //Est-ce la valeur du dé qui est augmentée ?
+            if (pIndex == aGame.indexPlaying){  //Est-ce bien le joueur dont c'est le tour qui a parié ?
                 if ( diceForm && valForm && (isFirstBet || (diceUp || valUp) ) ){
                     aGame.currentBet = data[2];
                     aGame.indexPlayerBet = aGame.indexPlaying;
@@ -177,15 +185,17 @@ io.on('connection', (socket) =>{
         }
     })
 
+    //Accusation menteur
     socket.on("playerLiar", (gameId)=>{
         if (checkLogged(socket)){
             game = getGameById(gameId);
-            currentPIndex = game.indexUserId.indexOf(socket.id);
-            previousPIndex = game.indexPlayerBet;
+            currentPIndex = game.indexUserId.indexOf(socket.id);    //Joueur qui accuse
+            previousPIndex = game.indexPlayerBet;   //Joueur qui a parié
 
             totalDice = getTotalDiceOf(game);
             rep = [];
             
+            //Vérification : qui a raison ?
             if ( totalDice >= game.currentBet[0] ){
                 rep = [false, true];                  // rep[0] = playerAskedLiar     rep[1] = playerCurrentBet
             }else{
@@ -214,6 +224,7 @@ io.on('connection', (socket) =>{
         }
     })
 
+    //Quitter une partie
     socket.on("leaveGame", function(){
         if (checkLogged(socket)){
             user = players[socket.id];
@@ -224,16 +235,16 @@ io.on('connection', (socket) =>{
             dataGames[index] = game;
             players[socket.id].actualGame = "null";
             
-            if (checkEndGame(game) == true){
+            if (checkEndGame(game) == true){    //si il ne reste qu'un seul joueur dans la partie -> fin de la partie
                 winnerI = 0;
                 game.status = "ended";
                 dataGames[index] = game;
                 socket.to(game.id).emit("endGame", [game, winnerI]);
                 socket.to(game.id).emit("announce", "Le joueur "+user.uname+" à quitté la partie");
             }else if (!checkEmptyGame(game)){
-                if (game.status == "ended"){
+                if (game.status == "ended"){    //si il reste des joueurs mais que la partie est terminé
                     socket.to(game.id).emit("announce", "Le joueur "+user.uname+" à quitté la partie");
-                }else{
+                }else{  //si il reste des joueurs et que la partie est toujours en cours
                     game.owner = game.players[0].uid;
                     game = endRound(game, [false, false]);
                     socket.to(game.id).emit("newRound", game);
@@ -243,6 +254,7 @@ io.on('connection', (socket) =>{
         }
     });
 
+    //Un joueur se déconnecte 
     socket.on("disconnect", function() {
         if(sockets[socket.id] != undefined){
             if (players[socket.id].actualGame != "null"){
@@ -347,7 +359,7 @@ function getTotalDiceOf(game){
 function endRound(game, resTurn){
     let loserI;
     let winnerI;
-    if (resTurn[0] == false && resTurn[1] == false){   // endRound after player leave game
+    if (resTurn[0] == false && resTurn[1] == false){   // endRound après qu'un joueur ai quitté la partie
         for (let i = 0; i<game.nbPlayers; i++){
             generateDicesFor(game, i);
         }
@@ -401,7 +413,7 @@ function getWinnerIndex(game){
     return winnerI;
 }
 
-function turnTimeout(gameId){
+/* function turnTimeout(gameId){
     console.log("Player turn timeout");
     let game = getGameById(gameId);
 
@@ -419,7 +431,7 @@ function turnTimeout(gameId){
     timers[gameId] = setTimeout(()=>{ 
                         turnTimeout(game.id);
                     }, 20000 );
-}
+} */
 
 server.listen(process.env.PORT || port, function () {
  console.log('Votre app est disponible sur localhost:3000 !')
